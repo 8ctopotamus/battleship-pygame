@@ -4,14 +4,15 @@ import os
 import time
 import random
 
-pygame.display.set_caption("Battleship")
-
-WIDTH, HEIGHT = 500, 500
+WIDTH, HEIGHT = 500, 1000
+COL_SIZE = WIDTH / 10
+BLUE = (18, 11, 139)
+RED = (155, 29, 43)
+WHITE = (255,255,255)
+GREY = (200,200,200)
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-
 clock = pygame.time.Clock()
-
-# square_size = WIDTH / 10
+pygame.display.set_caption("Battleship")
 
 class Player:
   def __init__(self, map):
@@ -34,28 +35,49 @@ def handleInputs():
 
 def renderGUI(players):
   for player in players:
-    for row in player.map:
-      for col in row:
-        pygame.draw.rect(screen, (255,0,0), (100, 100, 100, 100))
+    for i in range(len(player.map)):
+      row = player.map[i]
+      for j in range(len(row)):
+        offset = 0
+        col = row[j] 
+        color = BLUE
+        if col == 1:
+          color = GREY          
+        if col == 2:
+          color = RED
+        if isinstance(player, Human):
+          offset = HEIGHT / 2
+        
+        pygame.draw.rect(screen, color, (j*COL_SIZE, (i*COL_SIZE)+offset, COL_SIZE, COL_SIZE))
 
 def main():
   run = True
   FPS = 60
   
   human = Human([
-    [1,1,1,0,0],
-    [0,0,1,0,0],
-    [0,0,1,0,0],
-    [0,0,1,0,1],
-    [0,0,1,0,1],
+    [1,1,1,0,0,0,0,0,0,0],
+    [0,0,1,0,0,0,0,0,0,0],
+    [0,0,1,0,0,0,0,0,0,0],
+    [0,0,1,0,1,0,0,0,0,0],
+    [0,0,1,0,1,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
   ])
 
   bot = Bot([
-    [0,1,0,0,0],
-    [0,1,0,0,0],
-    [0,1,0,1,1],
-    [0,1,0,0,0],
-    [0,0,1,1,1],
+    [0,1,0,0,0,0,0,0,0,0],
+    [0,1,0,0,0,0,0,0,0,0],
+    [0,1,0,1,1,0,0,0,0,0],
+    [0,1,0,0,0,0,0,0,0,0],
+    [0,0,1,1,1,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
   ])
 
   players = [human, bot]
