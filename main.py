@@ -20,6 +20,18 @@ class Player:
     self.map = map
     self.shotsFired = []
 
+  def drawMap(self):
+    for i in range(len(self.map)):
+      row = self.map[i]
+      for j in range(len(row)):
+        screenOffset = 0
+        col = row[j] 
+        if (col != 0):
+          if isinstance(self, Human):
+            screenOffset = HEIGHT / 2
+          color = GREY if col == 1 else RED
+          pygame.draw.rect(screen, color, (j*COL_SIZE + 1, (i*COL_SIZE)+screenOffset+1, COL_SIZE - 4, COL_SIZE - 4))
+
 class Human(Player):
   def __init__(self, map):
     super().__init__(map)
@@ -33,27 +45,15 @@ def handleInputs():
     if event.type == pygame.QUIT:
       quit()
 
-def renderGUI(players):
+def renderGUI(screen, players):
+  screen.fill(BLUE)
   for player in players:
-    for i in range(len(player.map)):
-      row = player.map[i]
-      for j in range(len(row)):
-        offset = 0
-        col = row[j] 
-        color = BLUE
-        if col == 1:
-          color = GREY          
-        if col == 2:
-          color = RED
-        if isinstance(player, Human):
-          offset = HEIGHT / 2
-        
-        pygame.draw.rect(screen, color, (j*COL_SIZE, (i*COL_SIZE)+offset, COL_SIZE, COL_SIZE))
+    player.drawMap()
+  pygame.display.flip()
 
 def main():
   run = True
   FPS = 60
-  
   human = Human([
     [1,1,1,0,0,0,0,0,0,0],
     [0,0,1,0,0,0,0,0,0,0],
@@ -84,7 +84,7 @@ def main():
 
   while run:
     clock.tick(FPS)
-    renderGUI(players)
+    renderGUI(screen, players)
     handleInputs()
     pygame.display.update()
   
