@@ -4,9 +4,10 @@ import os
 import time
 import random
 
-WIDTH, HEIGHT = 500, 1000
+WIDTH, HEIGHT = 300, 800
 COL_SIZE = WIDTH / 10
 BLUE = (18, 11, 139)
+BLUE_LIGHT = (12, 9, 130)
 RED = (155, 29, 43)
 WHITE = (255,255,255)
 GREY = (200,200,200)
@@ -30,7 +31,7 @@ class Player:
           if isinstance(self, Human):
             screenOffset = HEIGHT / 2
           color = GREY if col == 1 else RED
-          pygame.draw.rect(screen, color, (j*COL_SIZE + 1, (i*COL_SIZE)+screenOffset+1, COL_SIZE - 4, COL_SIZE - 4))
+          pygame.draw.rect(screen, color, (j*COL_SIZE + 1, (i*COL_SIZE)+screenOffset+1, COL_SIZE - 4, COL_SIZE - 4))    
 
 class Human(Player):
   def __init__(self, map):
@@ -44,6 +45,10 @@ def handleInputs():
   for event in pygame.event.get():
     if event.type == pygame.QUIT:
       quit()
+    if event.type == pygame.MOUSEBUTTONDOWN:
+      x, y = pygame.mouse.get_pos();
+      print(x)
+      print(y)
 
 def renderGUI(screen, players):
   screen.fill(BLUE)
