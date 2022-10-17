@@ -1,45 +1,38 @@
-import os
 import pygame
-import os
 import time
 import random
 
 WIDTH, HEIGHT = 300, 800
 COL_SIZE = WIDTH / 10
-BLUE = (18, 11, 139)
-BLUE_LIGHT = (12, 9, 130)
-RED = (155, 29, 43)
-WHITE = (255,255,255)
-GREY = (200,200,200)
+BLUE = (44, 73, 127)
+BLUE_LIGHT = (188, 210, 238)
+RED = (219, 48, 105)
+WHITE = (251,252,255)
+GREEN = (106, 141, 115)
+
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 pygame.display.set_caption("Battleship")
 
+class Cell: 
+  def __init__(self, coords, value):
+    self.value = value
+    self.visible = False
+    self.coords = coords
+
 class Player:
-  def __init__(self, map):
-    # TODO: randomly generate map if none passed in
-    self.map = map
+  def __init__(self, grid):
+    # TODO: randomly generate grid if none passed in
+    self.grid = map(lambda v : Cell(v), grid)
     self.shotsFired = []
-
-  def drawMap(self):
-    for i in range(len(self.map)):
-      row = self.map[i]
-      for j in range(len(row)):
-        screenOffset = 0
-        col = row[j] 
-        if (col != 0):
-          if isinstance(self, Human):
-            screenOffset = HEIGHT / 2
-          color = GREY if col == 1 else RED
-          pygame.draw.rect(screen, color, (j*COL_SIZE + 1, (i*COL_SIZE)+screenOffset+1, COL_SIZE - 4, COL_SIZE - 4))    
-
+    
 class Human(Player):
-  def __init__(self, map):
-    super().__init__(map)
+  def __init__(self, grid):
+    super().__init__(grid)
 
 class Bot(Player):
-  def __init__(self, map):
-    super().__init__(map)
+  def __init__(self, grid):
+    super().__init__(grid)
 
 def handleInputs():
   for event in pygame.event.get():
@@ -52,8 +45,17 @@ def handleInputs():
 
 def renderGUI(screen, players):
   screen.fill(BLUE)
-  for player in players:
-    player.drawMap()
+  # for player in players:
+  #   for i in range(len(player.grid)):
+  #     row = player.grid[i]
+  #     for j in range(len(row)):
+  #       screenOffset = 0
+  #       col = row[j] 
+  #       if (col != 0):
+  #         if isinstance(player, Human):
+  #           screenOffset = HEIGHT / 2
+  #         color = GREEN if col == 1 else RED
+  #         pygame.draw.rect(screen, color, (j*COL_SIZE + 1, (i*COL_SIZE)+screenOffset+1, COL_SIZE - 4, COL_SIZE - 4))    
   pygame.display.flip()
 
 def main():
