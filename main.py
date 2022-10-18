@@ -43,6 +43,12 @@ class Cell:
         pygame.draw.rect(screen, color, (self.x, self.y, self.width, self.height))
       if self.hit:
         self.drawHitMarker()
+  
+  def takeDamage(self):
+    self.visible = True
+    self.hit = True
+    if (self.value == 1):
+      self.value = 2
       
 class Player:  
   def __init__(self, grid):
@@ -59,30 +65,37 @@ class Human(Player):
     super().__init__(grid)
   
   def shoot(self, bot):
+    bot.isShooting = False
     x, y = pygame.mouse.get_pos();
-    print(x)
-    print(y)
     for cell in bot.grid:
       if (cell.x + cell.width >= x and cell.y + cell.height >= y):
-        pprint(vars(cell))
-        cell.visible = True
-        cell.hit = True
-        if (cell.value == 1):
-          cell.value = 2
+        cell.takeDamage()
         break
 
 class Bot(Player):
+  isShooting = False
+
   def __init__(self, grid):
     super().__init__(grid)
+  
+  def shoot(self, human):
+    self.isShooting = True
+    cell = random.choice(human.grid)
+    cell.takeDamage()
 
-def handleInputs(human, bot):
+def handleInputs(human, bot, isHumansTurn):
   for event in pygame.event.get():
-    if event.type == pygame.MOUSEBUTTONDOWN:
+    if event.type == pygame.MOUSEBUTTONDOWN and isHumansTurn:
       human.shoot(bot)
+      isHumansTurn = False
+    elif not bot.isShooting:
+      bot.shoot(human)
+      isHumansTurn = True
+    
     if event.type == pygame.QUIT:
       quit()
 
-def renderGUI(screen, players):
+def renderGUI(screen, players, isHumansTurn):
   screen.fill(BLUE_DARK)
   for player in players:
     for cell in player.grid:
@@ -120,12 +133,13 @@ def main():
   ])
 
   players = [human, bot]
+  isHumansTurn = True
 
   while run:
     clock.tick(FPS)
-    handleInputs(human, bot)
-    renderGUI(screen, players)
-  
+    handleInputs(human, bot, isHumansTurn)
+    renderGUI(screen, players, isHumansTurn)
+
   quit()
 
 main()
