@@ -1,3 +1,4 @@
+
 from pprint import pprint
 import pygame
 import time
@@ -12,9 +13,11 @@ RED = (219, 48, 105)
 WHITE = (251,252,255)
 GREEN = (106, 141, 115)
 
+icon = pygame.image.load('assets/images/icon.svg')
+pygame.display.set_icon(icon)
+pygame.display.set_caption("Battleship")
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
-pygame.display.set_caption("Battleship")
 
 class Cell: 
   def __init__(self, x, y, value, visible=False):
@@ -26,18 +29,22 @@ class Cell:
     self.width = COL_SIZE - 4
     self.height = COL_SIZE - 4
 
+  def drawHitMarker(self):
+    pygame.draw.circle(screen, WHITE, (self.x+self.width/2, self.y+self.height/2), 6)
+
   def draw(self, screen, color=BLUE):
-    pygame.draw.rect(screen, BLUE, (self.x, self.y, self.width, self.height))
+    if self.hit:
+      self.drawHitMarker()
+    else:
+      pygame.draw.rect(screen, BLUE, (self.x, self.y, self.width, self.height))
     if self.visible:
       if self.value != 0:
         color = GREEN if self.value == 1 else RED
         pygame.draw.rect(screen, color, (self.x, self.y, self.width, self.height))
       if self.hit:
-        pygame.draw.circle(screen, WHITE, (self.x+self.width/2, self.y+self.height/2), 6)
-
-class Player:
-  shotsFired = []
-  
+        self.drawHitMarker()
+      
+class Player:  
   def __init__(self, grid):
     isHuman = isinstance(self, Human)
     offset = HEIGHT / 2 if isHuman else 0
