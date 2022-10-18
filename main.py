@@ -3,7 +3,7 @@ import pygame
 import time
 import random
 
-WIDTH, HEIGHT = 300, 800
+WIDTH, HEIGHT = 400, 800
 COL_SIZE = WIDTH / 10
 BLUE = (44, 73, 127)
 BLUE_LIGHT = (188, 210, 238)
@@ -16,23 +16,28 @@ clock = pygame.time.Clock()
 pygame.display.set_caption("Battleship")
 
 class Cell: 
-  def __init__(self, rowIdx, colIdx, value):
+  def __init__(self, x, y, value, visible=False):
     self.value = value
-    self.visible = False
-    self.coords = { 
-      "x": colIdx*COL_SIZE + 1, 
-      "y": rowIdx*COL_SIZE 
-    }
-  
-  def draw(self, screen, color, coords):
-    if self.visible:
-      pygame.draw.rect(screen, color, (coords.x, coords.y, COL_SIZE - 4, COL_SIZE - 4)) 
+    self.visible = visible
+    self.x = x 
+    self.y = y
+
+  def draw(self, screen, color=BLUE):
+    if self.visible and self.value != 0:
+      color = GREEN if self.value == 1 else RED
+      pygame.draw.rect(screen, color, (self.x, self.y, COL_SIZE - 4, COL_SIZE - 4)) 
 
 class Player:
+  shotsFired = []
+  
   def __init__(self, grid):
-    # TODO: randomly generate grid if none passed in
-    self.grid = list(map(lambda row : list(map(lambda col : Cell(row[0], col[0], col[1]), enumerate(row[1]))), enumerate(grid)))
-    self.shotsFired = []
+    self.grid = [] # list(map(lambda row : list(map(lambda col : Cell(row[0], col[0], col[1]), enumerate(row[1]))), enumerate(grid)))
+    isHuman = isinstance(self, Human)
+    offset = HEIGHT / 2 if isHuman else 0
+    visible = True if isHuman else 0
+    for row in enumerate(grid):
+      for col in enumerate(row[1]):
+        self.grid.append(Cell(col[0]*COL_SIZE + 1, (row[0]*COL_SIZE)+offset+1, col[1], visible))
     
 class Human(Player):
   def __init__(self, grid):
@@ -53,32 +58,24 @@ def handleInputs():
 
 def renderGUI(screen, players):
   screen.fill(BLUE)
-  # for player in players:
-  #   for i in range(len(player.grid)):
-  #     row = player.grid[i]
-  #     for j in range(len(row)):
-  #       screenOffset = 0
-  #       col = row[j] 
-  #       if (col != 0):
-  #         if isinstance(player, Human):
-  #           screenOffset = HEIGHT / 2
-  #         color = GREEN if col == 1 else RED
-  #         pygame.draw.rect(screen, color, (j*COL_SIZE + 1, (i*COL_SIZE)+screenOffset+1, COL_SIZE - 4, COL_SIZE - 4))    
+  for player in players:
+    for cell in player.grid:
+      cell.draw(screen)  
   pygame.display.flip()
 
 def main():
   run = True
   FPS = 60
   human = Human([
-    [1,1,1,0,0,0,0,0,0,0],
-    [0,0,1,0,0,0,0,0,0,0],
-    [0,0,1,0,0,0,0,0,0,0],
-    [0,0,1,0,1,0,0,0,0,0],
-    [0,0,1,0,1,0,0,0,0,0],
+    [1,1,1,0,0,0,0,0,0,1],
+    [0,0,1,0,0,0,0,0,0,1],
+    [0,0,1,0,0,0,0,0,0,1],
+    [0,0,1,0,1,0,0,0,0,1],
+    [0,0,1,0,1,0,0,0,0,1],
     [0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,1,1,1,0,0],
     [0,0,0,0,0,0,0,0,0,0],
   ])
 
@@ -89,22 +86,19 @@ def main():
     [0,1,0,0,0,0,0,0,0,0],
     [0,0,1,1,1,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,1,1,1,1,1,0,0],
     [0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,1,1,1,0,0,0],
   ])
 
   players = [human, bot]
-  pprint(vars(human))
-  # pprint(vars(bot))
-  # pprint(players)
 
-  # while run:
-  #   clock.tick(FPS)
-  #   renderGUI(screen, players)
-  #   handleInputs()
-  #   pygame.display.update()
+  while run:
+    clock.tick(FPS)
+    renderGUI(screen, players)
+    handleInputs()
+    pygame.display.update()
   
   quit()
 
