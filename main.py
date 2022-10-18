@@ -3,20 +3,12 @@ from pprint import pprint
 import pygame
 import time
 import random
-
-WIDTH, HEIGHT = 400, 800
-COL_SIZE = WIDTH / 10
-BLUE_DARK = (28, 50, 93)
-BLUE = (44, 73, 127)
-BLUE_LIGHT = (188, 210, 238)
-RED = (219, 48, 105)
-WHITE = (251,252,255)
-GREEN = (106, 141, 115)
+import constants
 
 icon = pygame.image.load('assets/images/icon.svg')
 pygame.display.set_icon(icon)
 pygame.display.set_caption("Battleship")
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
+screen = pygame.display.set_mode((constants.WIDTH, constants.HEIGHT))
 clock = pygame.time.Clock()
 
 class Cell: 
@@ -26,20 +18,20 @@ class Cell:
     self.hit = False
     self.x = x 
     self.y = y
-    self.width = COL_SIZE - 4
-    self.height = COL_SIZE - 4
+    self.width = constants.COL_SIZE - 4
+    self.height = constants.COL_SIZE - 4
 
   def drawHitMarker(self):
-    pygame.draw.circle(screen, WHITE, (self.x+self.width/2, self.y+self.height/2), 6)
+    pygame.draw.circle(screen, constants.WHITE, (self.x+self.width/2, self.y+self.height/2), 6)
 
-  def draw(self, screen, color=BLUE):
+  def draw(self, screen, color=constants.BLUE):
     if self.hit:
       self.drawHitMarker()
     else:
-      pygame.draw.rect(screen, BLUE, (self.x, self.y, self.width, self.height))
+      pygame.draw.rect(screen, constants.BLUE, (self.x, self.y, self.width, self.height))
     if self.visible:
       if self.value != 0:
-        color = GREEN if self.value == 1 else RED
+        color = constants.GREEN if self.value == 1 else constants.RED
         pygame.draw.rect(screen, color, (self.x, self.y, self.width, self.height))
       if self.hit:
         self.drawHitMarker()
@@ -53,12 +45,12 @@ class Cell:
 class Player:  
   def __init__(self, grid):
     isHuman = isinstance(self, Human)
-    offset = HEIGHT / 2 if isHuman else 0
+    offset = constants.HEIGHT / 2 if isHuman else 0
     visible = True if isHuman else False
     self.grid = [] # list(map(lambda row : list(map(lambda col : Cell(row[0], col[0], col[1]), enumerate(row[1]))), enumerate(grid)))
     for row in enumerate(grid):
       for col in enumerate(row[1]):
-        self.grid.append(Cell(col[0]*COL_SIZE + 1, (row[0]*COL_SIZE)+offset+1, col[1], visible))
+        self.grid.append(Cell(col[0]*constants.COL_SIZE + 1, (row[0]*constants.COL_SIZE)+offset+1, col[1], visible))
     
 class Human(Player):
   def __init__(self, grid):
@@ -128,7 +120,7 @@ def main():
       isHumansTurn = True
     
     # render GUI
-    screen.fill(BLUE_DARK)
+    screen.fill(constants.BLUE_DARK)
     for player in players:
       for cell in player.grid:
         cell.draw(screen)  
