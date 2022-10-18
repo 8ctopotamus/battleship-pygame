@@ -42,7 +42,9 @@ class Cell:
     if (self.value == 1):
       self.value = 2
       
-class Player:  
+class Player:
+  shotsFired = []
+
   def __init__(self, grid):
     isHuman = isinstance(self, Human)
     offset = constants.HEIGHT / 2 if isHuman else 0
@@ -58,16 +60,20 @@ class Human(Player):
   
   def shoot(self, bot):
     x, y = pygame.mouse.get_pos();
+    targetCell = None
     for cell in bot.grid:
       if (cell.x + cell.width >= x and cell.y + cell.height >= y):
-        cell.takeDamage()
+        targetCell = cell
         break
+    if targetCell:
+      targetCell.takeDamage()
 
 class Bot(Player):
   def __init__(self, grid):
     super().__init__(grid)
   
   def shoot(self, human):
+    time.sleep(1)
     cell = random.choice(human.grid)
     cell.takeDamage()
 
@@ -103,6 +109,13 @@ def main():
   players = [human, bot]
   isHumansTurn = True    
 
+  def drawUI():
+    screen.fill(constants.BLUE_DARK)
+    for player in players:
+      for cell in player.grid:
+        cell.draw(screen)  
+    pygame.display.flip()
+
   while run:
     clock.tick(FPS)
 
@@ -114,18 +127,12 @@ def main():
       if event.type == pygame.QUIT:
         quit()
     
+    drawUI()
+
     # bot shoot
     if not isHumansTurn:
       bot.shoot(human)
       isHumansTurn = True
-    
-    # render GUI
-    screen.fill(constants.BLUE_DARK)
-    for player in players:
-      for cell in player.grid:
-        cell.draw(screen)  
-    # pygame.display.flip()
-    pygame.display.update()
 
   quit()
 
