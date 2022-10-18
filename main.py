@@ -65,7 +65,6 @@ class Human(Player):
     super().__init__(grid)
   
   def shoot(self, bot):
-    bot.isShooting = False
     x, y = pygame.mouse.get_pos();
     for cell in bot.grid:
       if (cell.x + cell.width >= x and cell.y + cell.height >= y):
@@ -73,35 +72,12 @@ class Human(Player):
         break
 
 class Bot(Player):
-  isShooting = False
-
   def __init__(self, grid):
     super().__init__(grid)
   
   def shoot(self, human):
-    self.isShooting = True
     cell = random.choice(human.grid)
     cell.takeDamage()
-
-def handleInputs(human, bot, isHumansTurn):
-  for event in pygame.event.get():
-    if event.type == pygame.MOUSEBUTTONDOWN and isHumansTurn:
-      human.shoot(bot)
-      isHumansTurn = False
-    elif not bot.isShooting:
-      bot.shoot(human)
-      isHumansTurn = True
-    
-    if event.type == pygame.QUIT:
-      quit()
-
-def renderGUI(screen, players, isHumansTurn):
-  screen.fill(BLUE_DARK)
-  for player in players:
-    for cell in player.grid:
-      cell.draw(screen)  
-  # pygame.display.flip()
-  pygame.display.update()
 
 def main():
   run = True
@@ -133,12 +109,31 @@ def main():
   ])
 
   players = [human, bot]
-  isHumansTurn = True
+  isHumansTurn = True    
 
   while run:
     clock.tick(FPS)
-    handleInputs(human, bot, isHumansTurn)
-    renderGUI(screen, players, isHumansTurn)
+
+    # handle inputs
+    for event in pygame.event.get():
+      if event.type == pygame.MOUSEBUTTONDOWN and isHumansTurn:
+        human.shoot(bot)
+        isHumansTurn = False
+      if event.type == pygame.QUIT:
+        quit()
+    
+    # bot shoot
+    if not isHumansTurn:
+      bot.shoot(human)
+      isHumansTurn = True
+    
+    # render GUI
+    screen.fill(BLUE_DARK)
+    for player in players:
+      for cell in player.grid:
+        cell.draw(screen)  
+    # pygame.display.flip()
+    pygame.display.update()
 
   quit()
 
