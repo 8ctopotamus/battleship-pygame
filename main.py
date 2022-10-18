@@ -63,7 +63,7 @@ class Human(Player):
     print(x)
     print(y)
     for cell in bot.grid:
-      if (cell.x >= x and cell.y >= y):
+      if (cell.x + cell.width >= x and cell.y + cell.height >= y):
         pprint(vars(cell))
         cell.visible = True
         cell.hit = True
