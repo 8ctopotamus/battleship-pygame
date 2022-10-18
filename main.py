@@ -1,3 +1,4 @@
+from pprint import pprint
 import pygame
 import time
 import random
@@ -15,15 +16,22 @@ clock = pygame.time.Clock()
 pygame.display.set_caption("Battleship")
 
 class Cell: 
-  def __init__(self, coords, value):
+  def __init__(self, rowIdx, colIdx, value):
     self.value = value
     self.visible = False
-    self.coords = coords
+    self.coords = { 
+      "x": colIdx*COL_SIZE + 1, 
+      "y": rowIdx*COL_SIZE 
+    }
+  
+  def draw(self, screen, color, coords):
+    if self.visible:
+      pygame.draw.rect(screen, color, (coords.x, coords.y, COL_SIZE - 4, COL_SIZE - 4)) 
 
 class Player:
   def __init__(self, grid):
     # TODO: randomly generate grid if none passed in
-    self.grid = map(lambda v : Cell(v), grid)
+    self.grid = list(map(lambda row : list(map(lambda col : Cell(row[0], col[0], col[1]), enumerate(row[1]))), enumerate(grid)))
     self.shotsFired = []
     
 class Human(Player):
@@ -88,12 +96,15 @@ def main():
   ])
 
   players = [human, bot]
+  pprint(vars(human))
+  # pprint(vars(bot))
+  # pprint(players)
 
-  while run:
-    clock.tick(FPS)
-    renderGUI(screen, players)
-    handleInputs()
-    pygame.display.update()
+  # while run:
+  #   clock.tick(FPS)
+  #   renderGUI(screen, players)
+  #   handleInputs()
+  #   pygame.display.update()
   
   quit()
 
