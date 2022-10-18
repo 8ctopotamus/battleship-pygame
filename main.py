@@ -5,6 +5,7 @@ import random
 
 WIDTH, HEIGHT = 400, 800
 COL_SIZE = WIDTH / 10
+BLUE_DARK = (28, 50, 93)
 BLUE = (44, 73, 127)
 BLUE_LIGHT = (188, 210, 238)
 RED = (219, 48, 105)
@@ -26,12 +27,13 @@ class Cell:
     self.height = COL_SIZE - 4
 
   def draw(self, screen, color=BLUE):
+    pygame.draw.rect(screen, BLUE, (self.x, self.y, self.width, self.height))
     if self.visible:
       if self.value != 0:
         color = GREEN if self.value == 1 else RED
         pygame.draw.rect(screen, color, (self.x, self.y, self.width, self.height))
       if self.hit:
-        pygame.draw.circle(screen, WHITE, (self.x+self.width/2, self.y+self.height/2), 10)
+        pygame.draw.circle(screen, WHITE, (self.x+self.width/2, self.y+self.height/2), 6)
 
 class Player:
   shotsFired = []
@@ -74,7 +76,7 @@ def handleInputs(human, bot):
       quit()
 
 def renderGUI(screen, players):
-  screen.fill(BLUE)
+  screen.fill(BLUE_DARK)
   for player in players:
     for cell in player.grid:
       cell.draw(screen)  
