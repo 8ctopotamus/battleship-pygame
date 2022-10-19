@@ -1,7 +1,7 @@
 import pygame
-import classes.Player
+from classes.Player import Player
 
-class Human(classes.Player):
+class Human(Player):
   def __init__(self, grid):
     super().__init__(grid)
   
