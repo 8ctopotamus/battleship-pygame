@@ -1,14 +1,13 @@
 import constants
 from classes.Cell import Cell
-from classes.Human import Human
 
 class Player:
   shotsFired = []
 
-  def __init__(self, grid):
-    isHuman = isinstance(self, Human)
+  def __init__(self, grid, isHuman=False):
+    self.isHuman = isHuman
     offset = constants.HEIGHT / 2 if isHuman else 0
-    visible = True if isHuman else False
+    visible = True if self.isHuman else False
     self.grid = [] # list(map(lambda row : list(map(lambda col : Cell(row[0], col[0], col[1]), enumerate(row[1]))), enumerate(grid)))
 
     for row in enumerate(grid):

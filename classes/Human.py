@@ -3,7 +3,7 @@ from classes.Player import Player
 
 class Human(Player):
   def __init__(self, grid):
-    super().__init__(grid)
+    super().__init__(grid, True)
   
   def shoot(self, bot):
     x, y = pygame.mouse.get_pos();
