@@ -8,6 +8,8 @@ class Player:
     self.isHuman = isHuman
     offset = constants.HEIGHT / 2 if isHuman else 0
     visible = True if self.isHuman else False
+
+    # TODO: if no grid, generate random
     self.grid = [] # list(map(lambda row : list(map(lambda col : Cell(row[0], col[0], col[1]), enumerate(row[1]))), enumerate(grid)))
 
     for row in enumerate(grid):

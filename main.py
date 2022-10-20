@@ -12,6 +12,7 @@ clock = pygame.time.Clock()
 def main():
   run = True
   FPS = 60
+
   human = Human([
     [0,0,0,0,0,0,0,0,0,1],
     [0,0,1,1,1,1,0,0,0,1],
@@ -65,6 +66,8 @@ def main():
     if not isHumansTurn:
       bot.shoot(human)
       isHumansTurn = True
+
+    # TODO: check for game over
 
   quit()
 
