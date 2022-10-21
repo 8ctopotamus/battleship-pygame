@@ -12,12 +12,13 @@ class Player:
     self.generateGrid()    
 
   def generateGrid(self):
+    print("Generating %s grid..." % ("Humans" if self.isHuman else "Bot's"))
     grid = list( map(lambda _ : [0]*10, range(10)) )
     for size in [5,4,3,3,2]:
       processing = True
       # search for a space to put the ship
       while processing:
-        # print("Working on ship size % s" % size)
+        print("Working on ship size % s" % size)
         ship = [] # [[0, 0], [0, 1], [0, 2], [x, y]]
         attempts = 0
         # find an empty cell to start
@@ -28,22 +29,24 @@ class Player:
         if grid[startRowIdx][startColIdx] == 0:
           ship.append([startRowIdx, startColIdx])
           while len(ship) < size and not attempts >= size:
-            (prevX, prevY) = ship[len(ship) - 1] 
-            # print("prevX: %s prevY: %s" % (prevX, prevY))
+            (prevHeadX, prevHeadY) = ship[0]
+            (prevTailX, prevTailY) = ship[len(ship) - 1] 
+            # print("prevTailX: %s prevTailY: %s" % (prevTailX, prevTailY))
             if vert:
-              if prevY - 1 > 0:
-                ship.append([prevX, prevY - 1])
+              if prevHeadY - 1 > 0:
+                ship.insert(0, [prevTailX, prevTailY - 1])
               # check below
-              if (prevY + 1) < len(ship):
-                ship.append([prevX, prevY + 1])
+              if (prevTailY + 1) < len(ship):
+                ship.append([prevTailX, prevTailY + 1])
             else:
               # check left
-              if prevX - 1 > 0:
-                ship.append([prevX - 1, prevY])
+              if prevHeadX - 1 > 0:
+                ship.insert(0, [prevTailX - 1, prevTailY])
               # check right
-              if (prevX + 1) < len(grid[startRowIdx]):
-                ship.append([prevX + 1, prevY])
+              if (prevTailX + 1) < len(grid[startRowIdx]):
+                ship.append([prevTailX + 1, prevTailY])
             attempts += 1
+            pprint(ship)
         # draw ship
         for (x, y) in ship:
           grid[y][x] = 1
