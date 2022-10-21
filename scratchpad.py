@@ -1,6 +1,5 @@
 from random import choice
 from pprint import pprint
-from tracemalloc import start
 
 grid = list( map(lambda _ : [0]*10, range(10)) )
 for size in [5,4,3,3,2]:
@@ -14,7 +13,6 @@ for size in [5,4,3,3,2]:
     startRowIdx = choice(range(10))
     startColIdx = choice(range(10))
     vert = choice([True, False])
-    
     # if start cell is available
     if grid[startRowIdx][startColIdx] == 0:
       ship.append([startRowIdx, startColIdx])
@@ -22,27 +20,26 @@ for size in [5,4,3,3,2]:
         (prevX, prevY) = ship[len(ship) - 1] 
         print("prevX: %s prevY: %s" % (prevX, prevY))
         if vert:
-          # check above
-          if prevY - 1 in grid:
+          if prevY - 1 > 0:
+            print("Appending cell above")
             ship.append([prevX, prevY - 1])
           # check below
-          if prevY + 1 in grid:
+          if (prevY + 1) < len(ship):
+            print("Appending cell below")
             ship.append([prevX, prevY + 1])
-        # if horiz
         else:
           # check left
-          if prevX - 1 in grid[startRowIdx]:
+          if prevX - 1 > 0:
             ship.append([prevX - 1, prevY])
           # check right
-          if prevX + 1 in grid[startRowIdx]:
+          if (prevX + 1) < len(grid[startRowIdx]):
             ship.append([prevX + 1, prevY])
-        print("ship")
-        pprint(ship)
         attempts += 1
+      print("ship")
+      pprint(ship)
     # draw ship
     for (x, y) in ship:
       grid[y][x] = 1
     processing = False
-
 
 pprint(grid)
