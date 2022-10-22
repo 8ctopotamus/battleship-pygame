@@ -15,8 +15,8 @@ class Game:
     self.running = False
   
   def run(self):
-    running = True 
-    while running:
+    self.running = True 
+    while self.running:
       self.clock.tick(constants.FPS)
 
       # handle inputs
