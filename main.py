@@ -11,8 +11,9 @@ screen = pygame.display.set_mode((constants.WIDTH, constants.HEIGHT))
 clock = pygame.time.Clock()
 
 def main():
-  menu = Menu(screen, clock)  
+  # menu = Menu(screen, clock)  
   game = Game(screen, clock)
+  game.run()
 
   quit()
 

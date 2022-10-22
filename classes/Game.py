@@ -11,7 +11,7 @@ class Game:
     self.human = Human()
     self.bot = Bot()
     self.players = [self.human, self.bot]
-    self.isHumansTurn = choice(True, False)
+    self.isHumansTurn = choice([True, False])
     self.running = False
   
   def run(self):
@@ -21,22 +21,23 @@ class Game:
 
       # handle inputs
       for event in pygame.event.get():
-        if event.type == pygame.MOUSEBUTTONDOWN and isHumansTurn:
+        if event.type == pygame.MOUSEBUTTONDOWN and self.isHumansTurn:
           self.human.shoot(self.bot)
-          isHumansTurn = False
+          self.isHumansTurn = False
         if event.type == pygame.QUIT:
+          self.running = False
           quit()
       
       self.drawUI()
 
       # bot shoot
-      if not isHumansTurn:
+      if not self.isHumansTurn:
         self.bot.shoot(self.human)
-        isHumansTurn = True
+        self.isHumansTurn = True
 
       # check for game over
       if not self.human.isAlive() or not self.bot.isAlive():
-        running = False
+        self.running = False
 
   def drawUI(self):
     self.screen.fill(constants.BLUE_DARK)
