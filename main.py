@@ -8,7 +8,7 @@ pygame.display.set_icon(icon)
 pygame.display.set_caption("Battleship")
 screen = pygame.display.set_mode((constants.WIDTH, constants.HEIGHT))
 clock = pygame.time.Clock()
-    
+
 def main():
   run = True
   FPS = 60
@@ -43,7 +43,9 @@ def main():
       bot.shoot(human)
       isHumansTurn = True
 
-    # TODO: check for game over
+    # check for game over
+    if not human.isAlive() or not bot.isAlive():
+      run = False
 
   quit()
 

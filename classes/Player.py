@@ -9,16 +9,19 @@ class Player:
   def __init__(self, isHuman=False):
     self.isHuman = isHuman
     self.grid = []
-    self.generateGrid()    
+    self.generateGrid()
+
+  def isAlive(self):
+    return any( list( map(lambda cell : cell.value == 1, self.grid) ) )  
 
   def generateGrid(self):
-    print("Generating %s grid..." % ("Humans" if self.isHuman else "Bot's"))
+    # print("Generating %s grid..." % ("Humans" if self.isHuman else "Bot's"))
     grid = list( map(lambda _ : [0]*10, range(10)) )
     for size in [5,4,3,3,2]:
       processing = True
       # search for a space to put the ship
       while processing:
-        print("Working on ship size % s" % size)
+        # print("Working on ship size % s" % size)
         ship = [] # [[0, 0], [0, 1], [0, 2], [x, y]]
         attempts = 0
         # find an empty cell to start
@@ -46,7 +49,7 @@ class Player:
               if (prevTailX + 1) < len(grid[startRowIdx]):
                 ship.append([prevTailX + 1, prevTailY])
             attempts += 1
-            pprint(ship)
+            # pprint(ship)
         # draw ship
         for (x, y) in ship:
           grid[y][x] = 1
