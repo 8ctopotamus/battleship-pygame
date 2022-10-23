@@ -40,7 +40,7 @@ class Game:
         self.running = False
 
   def drawUI(self):
-    self.screen.fill(constants.BLUE_DARK)
+    # self.screen.fill(constants.BLUE_DARK)
     for player in self.players:
       for cell in player.grid:
         cell.draw(self.screen)  
