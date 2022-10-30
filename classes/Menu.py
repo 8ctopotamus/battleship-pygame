@@ -22,13 +22,11 @@ class Menu:
       
       (x, y) = pygame.mouse.get_pos()
 
-    
-
-      for event in pygame.event.get():
-        if event.type == pygame.MOUSEBUTTONDOWN:
+      # for event in pygame.event.get():
+      #   if event.type == pygame.MOUSEBUTTONDOWN:
 
           # self.running = False
-        if event.type == pygame.QUIT:
-          quit()
+        # if event.type == pygame.QUIT:
+        #   quit()
       
       pygame.display.flip()

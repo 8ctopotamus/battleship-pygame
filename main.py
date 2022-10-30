@@ -13,10 +13,10 @@ screen = pygame.display.set_mode((constants.WIDTH, constants.HEIGHT))
 clock = pygame.time.Clock()
 
 screen.fill(constants.BLUE_DARK)
-# pprint(pygame.font.get_fonts())
 
 def main():
   Menu(screen, clock)
+  Game(screen, clock)
 
   quit()
 
