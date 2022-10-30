@@ -1,3 +1,4 @@
+from time import sleep
 import pygame
 from random import choice
 from classes.Human import Human
@@ -5,7 +6,7 @@ from classes.Bot import Bot
 import constants
 
 class Game:
-  def __init__(self, screen, clock):
+  def __init__(self, screen, clock, onGameOver):
     self.screen = screen
     self.clock = clock
     self.human = Human()
@@ -13,11 +14,14 @@ class Game:
     self.players = [self.human, self.bot]
     self.isHumansTurn = choice([True, False])
     self.running = False
+    self.onGameOver = onGameOver
+    self.run()
   
   def run(self):
     self.running = True 
     while self.running:
       self.clock.tick(constants.FPS)
+      self.screen.fill(constants.BLUE_DARK)
 
       # handle inputs
       for event in pygame.event.get():
@@ -38,6 +42,7 @@ class Game:
       # check for game over
       if not self.human.isAlive() or not self.bot.isAlive():
         self.running = False
+        self.onGameOver()
 
   def drawUI(self):
     # self.screen.fill(constants.BLUE_DARK)

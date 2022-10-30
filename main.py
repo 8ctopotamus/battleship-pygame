@@ -14,10 +14,14 @@ clock = pygame.time.Clock()
 
 screen.fill(constants.BLUE_DARK)
 
-def main():
-  Menu(screen, clock)
-  Game(screen, clock)
+def startGame():
+  Game(screen, clock, startMenu)
 
+def startMenu():
+  Menu(screen, clock, startGame)
+
+def main():
+  startMenu()
   quit()
 
 main()
