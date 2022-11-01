@@ -12,6 +12,7 @@ class Menu:
     self.run()
   
   def run(self):
+    self.screen.fill(constants.BLUE_DARK)
     titleText = self.largeFont.render('BATTLESHIP', False, (255,255,255))
     
     while self.running:
