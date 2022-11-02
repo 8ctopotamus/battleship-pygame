@@ -21,10 +21,11 @@ class Game:
     self.run()
   
   def run(self):
-    self.screen.fill(constants.BLUE_DARK)
     self.running = True 
     while self.running:
       self.clock.tick(constants.FPS)
+
+      self.screen.fill(constants.BLUE_DARK)
 
       # handle inputs
       for event in pygame.event.get():
